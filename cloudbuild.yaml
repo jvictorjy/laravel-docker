@@ -13,7 +13,7 @@ steps:
 
     -   id: "Copying .env"
         name: "gcr.io/cloud_builders/docker"
-        args: ["exec", "-t", "app", "cp", ".env.exemple", ".env"]
+        args: ["exec", "-t", "app", "cp", ".env.example", ".env"]
 
     -   id: "Running key:generate"
         name: "gcr.io/cloud_builders/docker"
