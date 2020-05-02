@@ -1,12 +1,28 @@
 steps:
-    -   id: "Rodando docker-compose"
+    -   id: "Running docker-compose"
         name: "gcr.io/$PROJECT_ID/docker-compose:1.25.5"
         args: ["-f", "docker-compose.cloudbuild.yaml", "up", "-d"]
 
-    -   id: "Rodando docker ps"
+    -   id: "Running docker ps"
         name: "gcr.io/cloud_builders/docker"
         args: ["ps"]
 
-    -   id: "Rodando composer"
+    -   id: "Running composer"
         name: "gcr.io/cloud_builders/docker"
         args: ["exec", "-t", "app", "composer", "install"]
+
+    -   id: "Copying .env"
+        name: "gcr.io/cloud_builders/docker"
+        args: ["exec", "-t", "app", "cp", ".env.exemple", ".env"]
+
+    -   id: "Running key:generate"
+        name: "gcr.io/cloud_builders/docker"
+        args: ["exec", "-t", "app", "php", "/var/www/artisan", "key:generate"]
+
+    -   id: "Running migrations"
+        name: "gcr.io/cloud_builders/docker"
+        args: ["exec", "-t", "app", "php", "/var/www/artisan", "migrate"]
+
+    -   id: "Running tests"
+        name: "gcr.io/cloud_builders/docker"
+        args: ["exec", "-t", "app", "php", "/var/www/vendor/bin/phpunit", "-c", "/var/www/phpunit.xml"]
